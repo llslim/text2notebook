@@ -1,0 +1,12 @@
+# User Settings
+settings.json
+.text2notebook/
+
+# Build Artifacts
+*.wixobj
+*.msi
+*.pdb
+*.cab
+
+# Shortcuts
+*.lnk

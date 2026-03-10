@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="Text2Notebook Converter" Language="1033" Version="1.0.0.0" Manufacturer="LL Slim LLC" UpgradeCode="B6930607-3094-4216-B268-301F60340001">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perUser" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Feature Id="ProductFeature" Title="Text2Notebook" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="ApplicationShortcut" />
+      <ComponentRef Id="DesktopShortcut" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="LocalAppDataFolder">
+        <Directory Id="INSTALLFOLDER" Name="Text2Notebook" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder" />
+      <Directory Id="DesktopFolder" />
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="MainScript" Guid="*">
+        <File Source="Text2notebook_WPF.ps1" KeyPath="yes" />
+        <RegistryValue Root="HKCU" Key="Software\LL Slim LLC\Text2Notebook" Name="installed" Type="integer" Value="1" />
+        <RemoveFolder Id="CleanUpAppFolder" Directory="INSTALLFOLDER" On="uninstall"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <DirectoryRef Id="ProgramMenuFolder">
+      <Component Id="ApplicationShortcut" Guid="*">
+        <Shortcut Id="ApplicationStartMenuShortcut" 
+                  Name="Text2Notebook" 
+                  Description="Text2Notebook Converter - (c) LL Slim LLC"
+                  Target="[SystemFolder]WindowsPowerShell\v1.0\powershell.exe"
+                  Arguments="-WindowStyle Hidden -ExecutionPolicy Bypass -File &quot;[INSTALLFOLDER]Text2notebook_WPF.ps1&quot;"
+                  WorkingDirectory="INSTALLFOLDER"/>
+        <RegistryValue Root="HKCU" Key="Software\LL Slim LLC\Text2Notebook" Name="shortcut" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+    
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="DesktopShortcut" Guid="*">
+        <Shortcut Id="ApplicationDesktopShortcut"
+                  Name="Text2Notebook"
+                  Description="Text2Notebook Converter - (c) LL Slim LLC"
+                  Target="[SystemFolder]WindowsPowerShell\v1.0\powershell.exe"
+                  Arguments="-WindowStyle Hidden -ExecutionPolicy Bypass -File &quot;[INSTALLFOLDER]Text2notebook_WPF.ps1&quot;"
+                  WorkingDirectory="INSTALLFOLDER"/>
+        <RegistryValue Root="HKCU" Key="Software\LL Slim LLC\Text2Notebook" Name="desktopShortcut" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
